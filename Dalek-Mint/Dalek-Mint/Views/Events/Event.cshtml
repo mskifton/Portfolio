@@ -1,0 +1,301 @@
+﻿@{
+    ViewData["Title"] = "Event";
+    ViewData["CurModel"] = Model;
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        function validateFields() {
+
+            var name = document.getElementById("nameInput").value;
+            var email = document.getElementById("emailInput").value;
+
+            if (name === "" || email === "") {
+                document.getElementById("RSVPError").innerHTML = "<div class='alert alert-danger text-center my-0 py-0'><h5>Please fill out all the fields</h5></div>";
+
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+
+
+        $("#btRSVP").click(function (e) {
+
+            if (validateFields()) {
+                $.ajax({
+                    type: 'GET',
+                    url: "/api/RSVP/?EventId=" + @Model.MainEvent.EventId + "&RSVPChoice=" + $("#ddRSVP :selected").val() + "&Name=" + $("#nameInput").val() + "&Email=" + $("#emailInput").val(),
+                    success: AjaxSucceeded,
+                    error: AjaxFailed
+                });
+            }
+        });
+
+        function AjaxSucceeded() {
+            switch ($("#ddRSVP :selected").val()) {
+
+                case "2":
+                    document.getElementById("RSVPError").innerHTML = "<div class='alert alert-success text-center my-0 py-0'><h5>Excited to see you!</h5></div>";
+                    break;
+
+                case "1":
+                    document.getElementById("RSVPError").innerHTML = "<div class='alert alert-secondary text-center my-0 py-0'><h5>Thanks for your interest!</h5></div>";
+                    break;
+
+                case "0":
+                    document.getElementById("RSVPError").innerHTML = "<div class='alert alert-danger text-center my-0 py-0'><h5>Sorry you can't make it!</h5></div>";
+                    break;
+
+                default:
+            }
+
+        }
+
+        function AjaxFailed() {
+            document.getElementById("RSVPError").innerHTML += "<div class='alert alert-danger text-center'><h5>Something went wrong, please try again later</h4></div>";
+        }
+    });
+</script>
+
+
+<script>
+    //Script for prompting the delete button
+    function deleteConfirm(){
+        var result = confirm("Are you sure you want to delete this?");
+
+        if (result) {
+            location.href = '@Url.Action("Delete", "Events", new { id = Model.MainEvent.EventId})';
+        }
+    }
+
+</script>
+
+@if (Session["Admin"] != null)
+{
+<div class="row">
+    <button class="btn btn-primary text-white col-sm-4 mx-auto mb-sm-auto" onclick="location.href='@Url.Action("Edit", "Events", new { id = Model.MainEvent.EventId})'">Edit Event</button>
+    <button class="btn btn-primary text-white col-sm-4 mx-auto" onclick="return deleteConfirm();">Delete Event</button>
+</div>
+    <br />
+}
+
+<div class="row">
+
+    <div class="col-12 pl-0 col-sm-6">
+        @if (Model.MainEvent.Image != null)
+        {
+            <img src="data:image;base64,@System.Convert.ToBase64String(Model.MainEvent.Image)" alt="@(Model.MainEvent.Name) picture" class="w-100">
+        }
+        else
+        {
+            <img src="~/Images/@(Model.MainEvent.CategoryName).jpg " alt="@(Model.MainEvent.Name) picture" class="w-100">
+        }
+
+                <hr />
+
+        @if (@Model.MainEvent.Category != null)
+        {
+            <div class="row">
+                <h3><strong>Categories</strong></h3>
+            </div>
+            <div class="row">
+                <span class="badge badge-secondary mx-1">@Model.MainEvent.CategoryName</span>
+            </div>
+        }
+    </div>
+
+    <div class="col-sm-6 col-12">
+        <div class="row">
+            <h2>@Model.MainEvent.Name</h2>
+        </div>
+
+        <div class="row">
+            <h3><strong>&#128197; Date and Time: </strong>@Model.MainEvent.Date</h3>
+        </div>
+
+        <div class="row">
+            <h3><strong>&#127979; Campus: </strong>@ViewBag.Campus</h3>
+        </div>
+
+        <div class="row">
+            <h3><strong>&#127970; Location: </strong>@Model.MainEvent.FullAddress</h3>
+        </div>
+
+        @*<div class="row">
+            <h3><strong>&#127970; Campus: </strong>@Model.MainEvent.CampusHost</h3>
+        </div>*@
+
+
+
+        <div class="col-12 mt-5">
+            <div class="col-10 col-offset-1 mx-auto">
+
+                @if (Model.MainEvent.RSVPCapable)
+                {
+                <div class="text-center">
+                    <h3><strong>RSVP</strong></h3>
+                </div>
+
+                <div id="RSVPContainer">
+                    <form>
+                        <div class="row">
+                            <div class=" form-group w-100">
+                                <label for="nameInput">Name</label>
+                                <input id="nameInput" class="form-control" />
+
+                                <label for="emailInput">Email</label>
+                                <input id="emailInput" class="form-control" />
+                                <br />
+
+                                <select id="ddRSVP" class="form-control w-100">
+                                    <option value="0">Not Attending</option>
+                                    <option value="1">Interested</option>
+                                    <option value="2" selected="selected">Attending</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <input type="button" id="btRSVP" class="btn btn-primary form-control btn-block text-white w-100" value="RSVP" />
+                        </div>
+                    </form>
+                    <br />
+                    <div class="row text-center">
+                        <div id="RSVPError" class="w-100"></div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-5 float-left">
+                        @Model.MainEvent.Attending people say they're going!
+                    </div>
+                    <div class="col-5 float-right">
+                        @Model.MainEvent.Interested people say they're interested!
+                    </div>
+                </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<div class="row">
+    <div class="col-12">
+        <div class="row"><h3><strong>Description:</strong></h3></div>
+
+        <div class="row">
+            <h5>
+                @Model.MainEvent.Description
+            </h5>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <h3><strong>Host</strong></h3>
+        </div>
+
+        @if (Model.MainEvent.EventHosts.Count > 0)
+        {
+            foreach (var host in Model.MainEvent.EventHosts)
+            {
+                <a href="@Url.Action("Club/" + host.ClubId, "Clubs")">
+                    <div class="row">
+                        <div class="col-sm-1 col-6">
+                            @if (host.Image != null)
+                            {
+                                <img src="data:image;base64,@System.Convert.ToBase64String(host.Image)" alt="@(host.Name) picture" class="w-100 rounded-circle">
+                            }
+                            else
+                            {
+                                <img src="~/Images/Mid-State Logo Vertical 4C Process.jpg" alt="@(host.Name) picture" class="w-100">
+                            }
+                        </div>
+                        <h4><span class="img">@host.Name</span></h4>
+                    </div>
+                </a>
+            }
+
+        }
+        else
+        {
+            <a href='#'>
+                <div class="row">
+                    <div class="col-sm-1 col-6 mt-1">
+                        <img src="~/Images/Mid-State Logo Vertical 4C Process.jpg" alt="Host Picture" class="w-100" />
+                    </div>
+                    <h4><span class="img">Mid-State</span></h4>
+                </div>
+            </a>
+        }
+
+
+
+
+        <hr />
+
+        @if (Model.MainEvent.EventHosts.Count > 0)
+        {
+            if (Model.MainEvent.EventHosts.Count > 1)
+            {
+                <div class="row">
+                    <h3>
+                        <strong>
+                            Other Events Hosted By
+                            @foreach (var host in Model.EventHosts)
+                            {
+                                host.Name.ToString();
+                            }
+                        </strong>
+                    </h3>
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    <h3><strong>Upcoming Events Hosted By @Model.MainEvent.EventHosts[0].Name:</strong></h3>
+                </div>
+            }
+
+            <div class="row">
+                @* foreach event the host is hosting *@
+                @foreach (var evnt in Model.SimilarEvents)
+                {
+                    <div class="col-sm-3 col-12">
+                        <a href="@Url.Action("Event/" + evnt.EventId, "Events")">
+                            <div class="card w-100">
+                                @if (evnt.Image != null)
+                                {
+                                    <img class="card-img-top" height="240" width="320" src="data:image;base64,@System.Convert.ToBase64String(evnt.Image)" alt="@(evnt.Name) picture">
+                                }
+                                else
+                                {
+                                    <img class="card-img-top" height="240" width="320" src="~/Images/@(evnt.CategoryName).jpg " alt="@(evnt.Name) picture">
+                                }
+                                <div class="card-body">
+                                    <h5 class="card-title">@evnt.Name</h5>
+                                    <h5 class="card-text">&#127970; @evnt.Address</h5>
+                                    <p class="card-text text-muted">&#128197; @evnt.Date</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <br />
+                }
+
+            </div>
+        }
+
+
+
+
+    </div>
+</div>

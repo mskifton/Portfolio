@@ -1,0 +1,81 @@
+﻿@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "PendingNews";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    @model PagedList.IPagedList<Dalek_Mint.Models.News>
+
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+}
+
+@if (Session["Admin"] == null)
+{
+    <h3 class="alert alert-danger">
+        Sorry you need to be an admin to access this page.
+    </h3>
+    return;
+}
+
+    <div class="row mb-5">
+        <div class="col-12 float-left">
+            <h1>Pending News</h1>
+        </div>
+        @if (Model.Count < 1)
+        {
+            <h1>There is nothing to show at this time</h1>
+            return;
+        }
+
+    </div>
+
+@if (TempData["Deny"] != null)
+{
+    <div class="row">
+        <div class="col-12 alert alert-danger text-center">
+            <h5>Event @TempData["Deny"] Has Been Denied</h5>
+        </div>
+    </div>
+}
+
+<div class="col-12 text-center">
+    @Html.PagedListPager(Model, page => Url.Action("PendingNews",
+  new { page }))
+</div>
+
+@foreach (var news in Model)
+{
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="row no-gutters">
+                    <div class="col-sm-3 col-12">
+                        <img src="~/images/img-placeholder.png" class="w-100" alt="News Picture">
+                    </div>
+                    <div class="col-sm-6 col-12">
+                        <div class="px-2">
+                            <h4 class="card-title font-weight-bold">@news.Title</h4>
+                            <h5 class="card-text">Contact: @news.ContactName - @news.Contact</h5>
+                            <h5 class="card-text">@news.Description</h5>
+                        </div>
+                    </div>
+                    <div class="mt-auto col-sm-3 col-12">
+                        <div class="w-100">
+                            <div class="row no-gutters float-right">
+                                <a href="@Url.Action("Approve/" + news.NewsId, "News")" class="btn btn-success text-white m-1">Approve</a>
+                                <a href="@Url.Action("EditApprove/" + news.NewsId , "News")" class="btn btn-info text-white m-1">Edit</a>
+                                <a href="@Url.Action("Deny/" + news.NewsId, "News")" style="width: 86.1px" class="btn btn-danger text-white m-1">Deny</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+        </div>
+    </div>
+}
+
+
+<div class="col-12 text-center">
+    @Html.PagedListPager(Model, page => Url.Action("PendingNews",
+  new { page }))
+</div>

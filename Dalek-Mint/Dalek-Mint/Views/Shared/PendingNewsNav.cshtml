@@ -1,0 +1,12 @@
+﻿<a class="link-no-ul" href="@Url.Action("PendingNews", "News")">
+    <div id="navEvents" class="px-2 pt-2 @if (ViewBag.NavTag == "Pending News") { @("active-nav"); }">
+        <h5 class="px-2">
+            Pending News
+            @if (ViewBag.PendingNewsAmt != null)
+            {
+                <span class="badge midstate-red text-white">@ViewBag.PendingNewsAmt</span>
+            }
+        </h5>
+    </div>
+</a>
+

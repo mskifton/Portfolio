@@ -1,0 +1,15 @@
+﻿
+@{
+    string text = (string)TempData["FlashMessage.Text"];
+    if (!string.IsNullOrWhiteSpace(text))
+    {
+        Dalek_Mint.enums.FlashMessageType type = (Dalek_Mint.enums.FlashMessageType)TempData["FlashMessage.Type"];
+    }
+}
+@if (!string.IsNullOrWhiteSpace(text))
+{
+    <div class="alert alert-success mx-auto">
+   
+            @text
+    </div>
+}

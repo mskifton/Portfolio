@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Sign In";
+}
+
+<script type="text/javascript">
+    // Sets the login button as the default button.
+    $(document).bind('keydown', function (e) {
+        if (e.which === 13) { // return
+            $('#searchBtn').trigger('click');
+        }
+    });
+</script>
+
+<div class="row">
+    <div class="col-lg-9 col-12">
+        <img src="~/images/Casual1.jpg" class="img-responsive w-100 mx-auto d-block" alt="Placeholder Image" />
+    </div>
+
+    <div class="col-lg-3 col-12 pt-md-3 pt-5">
+        <h2>@ViewData["Title"]</h2>
+        <h5>@ViewData["Message"]</h5>
+
+        <br />
+
+        @model Dalek_Mint.Models.User
+        @using (Html.BeginForm("SignIn", "Home", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <h3>Login</h3>;
+            @Html.ValidationMessageFor(model => model.Email, "", new { @style = "color: red" });
+            @Html.TextBoxFor(model => model.Email, new { @id = "txLogin", @class = "form-control" });
+            <br />;
+            <h3>Password</h3>;
+            @Html.TextBoxFor(model => model.Password, new { @id = "txPassword", @class = "form-control", @type = "Password" });
+            <br />;
+            <input type="submit" value="Sign In" id="btSignIn" class="form-control btn btn-primary" />
+        }
+        <br />
+    </div>
+</div>

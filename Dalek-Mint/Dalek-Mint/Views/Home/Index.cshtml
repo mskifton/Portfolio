@@ -1,0 +1,126 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+    <div class="col-12 text-center">
+        <img src="~/images/Casual5.jpg" class="w-100" alt="Midstate Logo" />
+    </div>
+</div>
+
+<br />
+
+<div class="row mt-3">
+    <div class="col-lg-2 col-12">
+        <h3>Events</h3>
+    </div>
+    <div class="col-md-4 col-lg-3 col-12 offset-lg-9 offset-md-8">
+        <a href="@Url.Action("AllEvents", "Events")" class="btn btn-block midstate-red text-white">View More Events</a>
+    </div>
+</div>
+
+<div class="row">
+    @foreach (var evnt in Model.UpcomingEvents)
+    {
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <a href="@Url.Action("Event/" + evnt.EventId, "Events")">
+                <div class="card">
+                    @if (evnt.Image != null)
+                    {
+                        <img class="card-img-top" height="240" width="320" src="data:image;base64,@System.Convert.ToBase64String(evnt.Image)" alt="@(evnt.Name) picture">
+                    }
+                    else
+                    {
+                        <img class="card-img-top" height="240" width="320" src="~/Images/@(evnt.CategoryName).jpg " alt="@(evnt.Name) picture">
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@evnt.Name</h5>
+                        <p class="card-text">&#127970; @evnt.Address</p>
+                        <p class="card-text text-muted">&#128197; @evnt.Date</p>
+                    </div>
+                </div>
+            </a>
+            <br />
+        </div>
+    }
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-sm-2 col-12">
+        <h3>Clubs</h3>
+    </div>
+    <div class="col-md-4 col-lg-3 col-12 offset-lg-9 offset-md-8">
+        <a href="@Url.Action("AllClubs", "Clubs")" class="btn btn-block midstate-red text-white">View More Clubs</a>
+    </div>
+</div>
+
+<div class="row">
+    @foreach (var club in Model.Clubs)
+    {
+        <div class="col-lg-3 col-md-6 col-12">
+            <a href="@Url.Action("Club/" + club.ClubId, "Clubs")">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div class="">
+                            @if (club.Image != null)
+                            {
+                                <img src="data:image;base64,@System.Convert.ToBase64String(club.Image)" alt="@(club.Name) picture" height="200" class="w-100 rounded-circle">
+                            }
+                            else
+                            {
+                                <img src="~/Images/Mid-State Logo Vertical 4C Process.jpg" alt="@(club.Name) picture" height="200" class="w-100">
+                            }
+                        </div>
+                    </div>
+                    <div class="card-body text-center"><h4>@club.Name</h4></div>
+                </div>
+                <br />
+            </a>
+        </div>
+    }
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-sm-2 col-12">
+        <h3>News</h3>
+    </div>
+    <div class="col-md-4 col-lg-3 col-12 offset-lg-9 offset-md-8">
+        <a href="@Url.Action("AllNews", "News")" class="btn btn-block midstate-red text-white">View More News</a>
+    </div>
+</div>
+
+@foreach (var news in Model.News)
+{
+    <a href="@Url.Action("News/" + news.NewsId, "News")">
+        <div class="card py-3">
+            <div class="row no-gutters">
+                @if (news.ClubLogo != null)
+                {
+                    <div class="col-lg-3 col-12">
+                        <img src="data:image;base64,@System.Convert.ToBase64String(news.ClubLogo)" alt="Club picture" height="200" class="col-10 offset-1">
+                    </div>
+                }
+                else
+                {
+                    <div class="col-lg-3 col-12">
+                        <img src="~/Images/Mid-State Logo Vertical 4C Process.jpg" alt="Club picture" height="200" class="col-10 offset-1">
+                    </div>
+                }
+                    <div class="col-sm-9 col-12">
+                        <div class="px-2">
+                            <h4 class="card-title font-weight-bold">@news.Title</h4>
+                            <h5 class="card-text">@news.PostedDate.ToString("dddd, MMMM dd, yyyy")</h5>
+                            <h5 class="card-text">@news.Description</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </a>
+
+    <br />
+}
+

@@ -1,0 +1,194 @@
+﻿@using PagedList.Mvc;
+
+@{
+    ViewData["Title"] = "All Events";
+
+    @model PagedList.IPagedList<Dalek_Mint.Models.Event>
+    
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+}
+
+<script>
+    function Filter() {
+        window.location.replace(BuildURL());
+    }
+
+    function Clear() {
+        window.location.replace(window.location.pathname);
+    }
+
+    function BuildURL() {
+
+        var URL = window.location.pathname;
+        var firstFilter = true;
+
+        // Adds the search string to the url
+        if (document.getElementById("txSearch").value != "") {
+            if (firstFilter) { URL += "?"; firstFilter = false; }
+            else { URL += "&"; }
+            URL += "search=" + document.getElementById("txSearch").value;
+        }
+
+        // Adds the date filter to the url
+        if (document.getElementById("txSearchDate").value != "") {
+            if (firstFilter) { URL += "?"; firstFilter = false; }
+            else { URL += "&"; }
+            URL += "Date=" + document.getElementById("txSearchDate").value;
+        }
+        else if ($("#cbWeekend").is(":checked")) {
+            if (firstFilter) { URL += "?"; firstFilter = false; }
+            else { URL += "&"; }
+            URL += "Weekend=1";
+        }
+
+        // Adds category filter to url
+        if ($("#ddCategories :selected").val() != 0) {
+            if (firstFilter) { URL += "?"; firstFilter = false; }
+            else { URL += "&"; }
+            URL += "Category=" + $("#ddCategories :selected").val();
+        }
+
+        // Adds free stuff/food to url
+        if ($("#cbFreeStuff").is(":checked")) {
+            if (firstFilter) { URL += "?"; firstFilter = false; }
+            else { URL += "&"; }
+            URL += "FreeStuff=1";
+        }
+        if ($("#cbFreeFood").is(":checked")) {
+            if (firstFilter) { URL += "?"; firstFilter = false; }
+            else { URL += "&"; }
+            URL += "FreeFood=1";
+        }
+
+            return URL;
+    }
+
+    $(document).ready(function () {
+
+        function togglePanel (){
+            var w = $(window).width();
+            if (w <= 974) {
+                $('#FilterEvents').removeClass('show');
+            }
+            else {
+                $('#FilterEvents').addClass('show');
+            }
+        }
+
+        togglePanel();
+
+        $(window).resize(function(){
+            togglePanel();
+        });
+
+        $( function() {
+        $( "#txSearchDate" ).datepicker();
+        } );
+
+        $('#txSearch').keypress(function (e) {
+            if (e.keyCode == 13)
+                $('#btSearch').click();
+        });
+
+        $('#txSearchDate').keypress(function (e) {
+            if (e.keyCode == 13) {
+                $('#rdWeekend').prop('checked', false);
+                $('#btSearchDate').click();
+            }
+        });
+
+        $("#ddCategories").change(function () {
+            Filter();
+        });
+
+        $("#cbFreeStuff").click(function () {
+            Filter();
+        });
+
+        $("#cbFreeFood").click(function () {
+            Filter();
+        });
+
+        $("#cbWeekend").click(function () {
+            $('#txSearchDate').attr('value', '');
+            Filter();
+        });
+
+        $(function () {
+            $("#ddCategories").val(@ViewBag.Category);
+        });
+    });
+</script>
+
+<div class="row">
+    <h1 class="col-3">Events</h1>
+
+
+    @if (Model.Count < 1)
+    {
+        <h1>There is nothing to show at this time</h1>
+        return;
+    }
+
+    <div class="col-12 col-sm-9 text-center">
+        @Html.Partial("_flashMessage", TempData["FlashMessage.Text"])
+    </div>
+</div>
+
+    <div class="row">
+        <div class="col-lg-3 col-12">
+            <div style="height: 82px;" class="d-none d-lg-block"></div>
+            <div class="card mb-3">
+                <ul class="list-group list-group-flush">
+                    @Html.Partial("_searchBar")
+                    @Html.Partial("_Filters", ViewData["Categories"])
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="col-lg-9 col-12">
+
+                            <div class="text-center">
+                @Html.PagedListPager(Model, page => Url.Action("AllEvents",
+              new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))
+            </div>
+
+        
+
+            <div class="row">
+
+                @foreach (var item in Model)
+                {
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <a href="@Url.Action("Event/" + item.EventId, "Events")">
+                            <div class="card">
+                                @if (item.Image != null)
+                                {
+                                    <img class="card-img-top" height="240" width="320" src="data:image;base64,@System.Convert.ToBase64String(item.Image)" alt="@(item.Name) picture">
+                                }
+                                else
+                                {
+                                    <img class="card-img-top" height="240" width="320" src="~/Images/@(item.CategoryName).jpg " alt="@(item.Name) picture">
+                                }
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Name</h5>
+                                <p class="card-text">&#127970; @item.Address</p>
+                                <p class="card-text text-muted">&#128197; @item.Date</p>
+                            </div>
+                            </div>
+                        </a>
+                        <br />
+                    </div>
+                }
+
+            </div>
+            <div class="text-center">
+                @Html.PagedListPager(Model, page => Url.Action("AllEvents",
+              new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))
+            </div>
+        </div>
+       
+    </div>
+

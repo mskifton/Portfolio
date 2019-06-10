@@ -1,0 +1,95 @@
+﻿@Scripts.Render("~/JS/ClubFormValidation.js")
+@model Dalek_Mint.Models.Club
+
+@{ if (Session["Admin"] == null)
+    {
+        <h1 class="alert alert-danger text-center w-100">You need admin privelages to view this.</h1>
+        return;
+
+    }
+
+
+    string evnt = "";
+    if (Model != null)
+    {
+        evnt = "Edit";
+
+        Session["Image"] = Model.Image;
+    }
+    else if (Model == null)
+    {
+        evnt = "Create";
+    }
+
+    if (ViewBag.FormType == "Edit")
+    {
+        <h2>Edit A Club</h2>
+    }
+    else
+    {
+        <h2>Add A New Club</h2>
+    }
+
+
+    using (Html.BeginForm(evnt, "Clubs", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+
+
+        if (evnt == "Edit")
+        {
+            <div>
+                @Html.EditorFor(model => model.ClubId, new { htmlAttributes = new { type = "hidden" } })
+            </div>
+        }
+
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @id = "adClubName" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger", id = "adNameError" })
+
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @id = "adClubDesc", rows = "2", cols = "2" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger", id = "adClubDescError" })
+
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+
+                <div class="row">
+                    <div class="form-group col-sm">
+                        <label for="fileUpload">Upload Logo</label>
+                        <br />
+                        <input type="file" name="file" id="fileUpload" />
+                    </div>
+                </div>
+
+                <div class="form-group float-right">
+                    @if (ViewBag.FormType == "Edit")
+                    {
+                        <input type="submit" value="Edit" class="btn btn-primary" />
+                    }
+                    else
+                    {
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    }
+                </div>
+            </div>
+        </div>
+
+    }
+}
+

@@ -1,0 +1,11 @@
+﻿
+<li class="list-group-item">
+    <div class="row">
+        <div class="col-9 pr-0">
+            @Html.TextBox("txSearch", (string)ViewBag.SearchTerm, new { @placeholder = "Search Event", @class = "form-control" })
+        </div>
+        <div class="col-3 pl-0">
+            <button class="form-control btn btn-block btn-primary" id="btSearch" onclick="Filter()"><div style="transform: rotate(45deg);">&#9906;</div></button>
+        </div>
+    </div>
+</li>

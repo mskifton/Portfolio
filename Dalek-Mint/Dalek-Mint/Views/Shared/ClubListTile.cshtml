@@ -1,0 +1,33 @@
+﻿@model Dalek_Mint.ViewModels.ClubViewModel
+
+<div class="col-md-9 col-12">
+    @foreach (var club in Model.Clubs)
+    {
+        <div class="row">
+            <div class="col-12">
+                <a href="@Url.Action("Club/" + club.ClubId, "Clubs")">
+                    <div class="card">
+                        <div class="row no-gutters py-3">
+                            <div class="col-sm-2">
+                                <div class="col-8 offset-2">
+                                    <img src="~/images/profile-placeholder.png" class="rounded-circle w-100" />
+                                </div>
+                            </div>
+                            <div class="col-sm-10">
+                                <div class="px-2 d-block d-sm-none">
+                                    <h5 class="card-title font-weight-bold text-center">@club.Name</h5>
+                                    <small class="card-text">@club.Description</small>
+                                </div>
+                                <div class="px-2 d-none d-sm-block">
+                                    <h4 class="card-title font-weight-bold">@club.Name</h4>
+                                    <h5 class="card-text">@club.Description</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <br />
+            </div>
+        </div>
+    }
+</div>

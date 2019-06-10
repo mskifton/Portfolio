@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Submission Wizard";
+}
+
+
+@if (Session["Admin"] == null)
+{
+    <h2 class="text-center">Submissions</h2>
+}
+else
+{
+    <h2 class="text-center">Creation</h2>
+}
+
+<br />
+<h4 class="text-center">@ViewData["Message"]</h4>
+<br />
+
+<div class="container">
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <div class="text-center">
+                <a href="@Url.Action("AdminFormCreation", "Events")" class="btn btn-primary text-white btn-block">Event</a>
+            </div>
+            <br />
+            <div class="text-center">
+                <a href="@Url.Action("AdminNewsForm", "News")" class="btn btn-primary text-white btn-block">News</a>
+            </div>
+            <br />
+            @if (Session["Admin"] != null)
+            {
+                <div class="text-center">
+                    <a href="@Url.Action("AdminClubForm", "Clubs")" class="btn btn-primary text-white btn-block">Clubs</a>
+                </div>
+            }
+        </div>
+        <div class="col-3"></div>
+
+    </div>
+</div>

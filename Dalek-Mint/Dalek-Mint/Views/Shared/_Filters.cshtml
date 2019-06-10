@@ -1,0 +1,68 @@
+﻿<div class="d-block d-lg-none">
+    <button class="btn text-white midstate-red w-100" type="button" data-toggle="collapse" data-target="#FilterEvents" aria-expanded="false" aria-controls="collapseExample">
+        Filters
+    </button>
+</div>
+
+<div class="collapse" id="FilterEvents">
+    <li class="list-group-item">
+        <div class="row"><h5>Dates</h5></div>
+        <form>
+            <div class="radio">
+                <label><input type="checkbox" id="cbWeekend" @ViewBag.Weekend> This Weekend</label>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-12">
+                Search By Date
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-9 pr-0">
+                <input id="txSearchDate" class="form-control" type="date" value="@ViewBag.Date"/>
+            </div>
+            <div class="col-3 pl-0">
+                <button class="form-control btn btn-block btn-primary" id="btSearchDate" onclick="Filter()"><div style="transform: rotate(45deg);">&#9906;</div></button>
+            </div>
+        </div>
+    </li>
+
+    <li class="list-group-item">
+        <div class="row"><h5>Categories</h5></div>
+        <div class="row">
+            <div class="col-12">
+                <select class="form-control" id="ddCategories">
+                    <option value="0">Any Category</option>
+                    @{List<SelectListItem> categories = new List<SelectListItem>();
+                        foreach (var sl in (List<SelectListItem>)ViewData["Categories"])
+                        {
+                            <option value="@sl.Value">@sl.Text</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+    </li>
+
+    <li class="list-group-item">
+        <div class="row"><h5>Perks</h5></div>
+        <div class="row">
+            <div class="col-12">
+                <div class="col-12">
+                    <label>
+                        <input type="checkbox" id="cbFreeStuff" name="FreeStuff" value="FreeStuff" @ViewBag.FreeStuff>
+                        <span for="FreeStuff">Free Stuff</span>
+                    </label>
+                </div>
+                <div class="col-12">
+                    <label>
+                        <input type="checkbox" id="cbFreeFood" name="FreeFood" value="FreeFood" @ViewBag.FreeFood>
+                        <span for="FreeFood">Free Food</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </li>
+
+    <button id="btReset" onclick="Clear()" class="btn btn-primary btn-block midstate-red">Reset Filters</button>
+</div>

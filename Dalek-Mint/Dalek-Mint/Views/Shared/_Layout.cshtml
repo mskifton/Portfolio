@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MINT</title>
+
+    <environment include="Development">
+        <script src="~/Content/jquery-3.3.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="~/Content/Site.css"/>
+    </environment>
+
+</head>
+<body class="p-0">
+    @*Show admin banner if admin is logged in.*@
+    @{
+
+        string buttonName = "";
+        string mobileButton = "";
+
+        if (Session["Admin"] != null)
+        {
+
+            buttonName = "Create";
+            mobileButton = "Create";
+
+    <div class="admintop">
+        <p><strong>ADMIN</strong>             
+        </p>
+    </div>
+
+        }
+        else
+        {
+            buttonName = "Submit your own!";
+            mobileButton = "Submit Form";
+        }
+    }
+
+    <nav class="navbar navbar-expand-lg nav-midstate-red pb-0">
+        <div class="col-sm-8 col-12 offset-sm-2">
+            @* Mobile Logo/Sign In *@
+            <div class="d-block d-lg-none">
+                <div class="row">
+                    <div class="col-7">
+                        <a href="@Url.Action("Index", "Home")" class="navbar-brand"><img src="~/images/Mid-State Color Illustrator Logo.bmp" class="w-100" /></a>
+                    </div>
+                    @{ if (Session["Admin"] != null)
+                        {
+                            <div class="col-5">
+                                <a href="@Url.Action("SignOut", "Home")" class="btn btn-primary text-white btn-block">Sign Out</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-5">
+                                <a href="@Url.Action("SignIn", "Home")" class="btn btn-primary text-white btn-block">Sign In</a>
+                            </div>
+                        } }
+
+
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <nav class="navbar navbar-light pl-0">
+                            <button class="navbar-toggler midstate-red" type="button" data-toggle="collapse" data-target="#NavBar"
+                                    aria-controls="NavBar" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="text-white">&#9776;</span>
+                            </button>
+                        </nav>
+                    </div>
+
+                    <div class="col-5 offset-3">
+                        <a href="@Url.Action("Wizard", "Home")" class="btn btn-primary text-white btn-block">@mobileButton</a>
+                    </div>
+
+
+                    <div class="col-12">
+                        <div class="collapse navbar-collapse text-center mt-2" id="NavBar">
+                            <ul class="navbar-nav mr-auto">
+                                <li class="border-bottom nav-item @if (ViewBag.NavTag == "Home") { @("midstate-red"); }">
+                                    <a href="@Url.Action("Index", "Home")" class="link-no-ul w-25"><div id="navEvents" class="px-2 pt-2"><h5 class="px-2 @if (ViewBag.NavTag == "Home") { @("text-white"); } else {@("text-dark")}">Home</h5></div></a>
+                                </li>
+                                <li class="border-bottom nav-item @if (ViewBag.NavTag == "Events") { @("midstate-red"); }">
+                                    <a class="link-no-ul w-25" href="@Url.Action("AllEvents", "Events")"><div id="navEvents" class="px-2 pt-2"><h5 class="px-2 @if (ViewBag.NavTag == "Events") { @("text-white"); } else {@("text-dark")}">Events</h5></div></a>
+                                </li>
+                                <li class="border-bottom nav-item @if (ViewBag.NavTag == "News") { @("midstate-red"); }">
+                                    <a class="link-no-ul w-25" href="@Url.Action("AllNews", "News")"><div id="navEvents" class="px-2 pt-2"><h5 class="px-2 @if (ViewBag.NavTag == "News") { @("text-white"); } else {@("text-dark")}">News</h5></div></a>
+                                </li>
+                                <li class="border-bottom nav-item @if (ViewBag.NavTag == "Clubs") { @("midstate-red"); }">
+                                    <a class="link-no-ul" href="@Url.Action("AllClubs", "Clubs" )"><div id="navEvents" class="px-2 pt-2"><h5 class="px-2 @if (ViewBag.NavTag == "Clubs") { @("text-white"); } else {@("text-dark")}">Clubs</h5></div></a>
+                                </li>
+                                @if (Session["Admin"] != null)
+                                {
+                                    <li class="border-bottom nav-item @if (ViewBag.NavTag == "Pending Events") { @("midstate-red text-white"); }">
+                                        @{Html.RenderAction("PendingEventsNav", "Home");}
+                                    </li>
+                                    <li class="border-bottom nav-item @if (ViewBag.NavTag == "Pending News") { @("midstate-red"); }">
+                                        @{Html.RenderAction("PendingNewsNav", "Home");}
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            @* Desktop Logo/Sign In *@
+            <div class="d-none d-lg-block">
+                <div class="row">
+
+                    <div class="col-3">
+                        <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand"><img src="~/Images/Mid-State Color Illustrator Logo.bmp" class="w-75" /></a>
+                    </div>
+                    @{ if (Session["Admin"] != null)
+                        {
+
+                            <div class="col-2 offset-7">
+                                <a asp-area="" asp-controller="Home" class="btn btn-primary text-white btn-block" asp-action="SignOut" href="@Url.Action("SignOut", "Home")">Sign Out </a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-2 offset-7">
+                                <a asp-area="" asp-controller="Home" class="btn btn-primary text-white btn-block" asp-action="SignIn" href="@Url.Action("SignIn", "Home")">Sign In</a>
+                            </div>
+                        }
+                    }
+                </div>
+
+
+                <div class="row">
+                    <div class="col-8">
+                        <div class="row text-center">
+                            <div class=" px-1">
+                                <a class="link-no-ul" href="@Url.Action("Index", "Home")"><div id="navHome" class="px-2 pt-2 text-dark @if (ViewBag.NavTag == "Home") { @("active-nav"); }"><h5>Home</h5></div></a>
+                            </div>
+                            <div class=" px-1">
+                                <a class="link-no-ul" href="@Url.Action("AllEvents", "Events")"><div id="navEvents" class="px-2 pt-2 text-dark @if (ViewBag.NavTag == "Events") { @("active-nav"); }"><h5>Events</h5></div></a>
+                            </div>
+                            <div class=" px-1">
+                                <a class="link-no-ul" href="@Url.Action("AllNews", "News")"><div id="navEvents" class="px-2 pt-2 text-dark @if (ViewBag.NavTag == "News") { @("active-nav"); }"><h5>News</h5></div></a>
+                            </div>
+                            <div class="px-1">
+                                <a class="link-no-ul" href="@Url.Action("AllClubs", "Clubs")"><div id="navEvents" class="px-2 pt-2 text-dark @if (ViewBag.NavTag == "Clubs") { @("active-nav"); }"><h5>Clubs</h5></div></a>
+                            </div>
+                            @if (Session["Admin"] != null)
+                            {
+                                <div class="px-1">
+                                    @{Html.RenderAction("PendingEventsNav", "Home");}
+                                </div>
+                                <div class="px-1">
+                                    @{Html.RenderAction("PendingNewsNav", "Home");}
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+
+                    <div class="col-2 offset-2">
+                        <a asp-area="" asp-controller="Home" class="btn btn-primary text-white btn-block" asp-action="Wizard" href="@Url.Action("Wizard", "Home")">@buttonName</a>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="body-content">
+        <div class="col-sm-8 col-12 offset-sm-2 pt-4">
+            @RenderBody()
+        </div>
+        <hr />
+        <footer class="text-right">
+            <p>&copy; 2019 - MINT</p>
+            <p class="float-right">Need <a href="@Url.Action("HelpPage", "Home")">Help? </a></p>
+        </footer>
+    </div>
+
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </environment>
+</body>
+</html>

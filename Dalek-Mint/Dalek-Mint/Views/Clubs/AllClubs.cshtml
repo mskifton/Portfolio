@@ -1,0 +1,100 @@
+﻿@using PagedList.Mvc;
+
+@{
+    ViewData["Title"] = "All Clubs";
+
+    @model PagedList.IPagedList<Dalek_Mint.Models.Club>
+
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+}
+
+<script>
+    function Search() {
+        window.location.href = window.location.pathname + "?search=" + document.getElementById("txSearch").value;
+    }
+
+    $(document).ready(function () {
+        $('#txSearch').keypress(function (e) {
+            if (e.keyCode == 13)
+                $('#btSearch').click();
+        });
+    });
+</script>
+
+<div class="row">
+    <h1 class="col-3">Clubs</h1>
+
+    @if (Model.Count < 1)
+    {
+        <h1>There is nothing to show at this time</h1>
+        return;
+    }
+
+    <div class="col-9 float-right">
+        @Html.Partial("_flashMessage", TempData["FlashMessage.Text"])
+    </div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-lg-3 col-12">
+        <div style="height: 82px;" class="d-none d-md-block"></div>
+        <div class="card mb-3">
+            <ul class="list-group list-group-flush">
+
+                @Html.Partial("_searchBar")
+
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-lg-9 col-12">
+
+        <div class="text-center">
+            @Html.PagedListPager(Model, page => Url.Action("AllClubs",
+          new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))
+        </div>
+        @foreach (var club in Model)
+        {
+            <div class="row">
+                <div class="col-12">
+                    <a href="@Url.Action("Club/" + club.ClubId, "Clubs")">
+                        <div class="card">
+                            <div class="row no-gutters py-3">
+                                <div class="col-lg-2 col-12">
+                                    <div class="col-8 offset-2">
+                                        @if (club.Image != null)
+                                        {
+                                            <img class="card-img-top" src="data:image;base64,@System.Convert.ToBase64String(club.Image)" alt="@(club.Name) picture">
+                                        }
+                                        else
+                                        {
+                                            <img class="card-img-top" src="~/Images/Mid-State Logo Vertical 4C Process.jpg" alt="@(club.Name) picture">
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-lg-10 col-12">
+                                    <div class="px-2 d-block d-sm-none">
+                                        <h5 class="card-title font-weight-bold text-center">@club.Name</h5>
+                                        <small class="card-text">@club.Description</small>
+                                    </div>
+                                    <div class="px-2 d-none d-sm-block">
+                                        <h4 class="card-title font-weight-bold">@club.Name</h4>
+                                        <h5 class="card-text">@club.Description</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <br />
+                </div>
+            </div>
+        }
+        <div class="text-center">
+            @Html.PagedListPager(Model, page => Url.Action("AllClubs",
+          new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))
+        </div>
+    </div>
+</div>

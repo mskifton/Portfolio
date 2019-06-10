@@ -1,0 +1,88 @@
+﻿@using PagedList.Mvc;
+@{
+    ViewBag.Title = "PendingEvents";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    @model PagedList.IPagedList<Dalek_Mint.Models.Event>
+
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+}
+
+@if (Session["Admin"] == null)
+{
+    <h3 class="alert alert-danger">
+        Sorry you need to be an admin to access this page.
+    </h3>
+    return;
+}
+
+    <div class="row mb-5">
+        <div class="col-12 float-left">
+            <h1>Pending Events</h1>
+        </div>
+
+        @if (Model.Count < 1)
+        {
+            <h1>There is nothing to show at this time</h1>
+            return;
+        }
+
+    </div>
+
+@if (TempData["Deny"] != null)
+{
+<div class="row">
+    <div class="col-12 alert alert-danger text-center">
+        <h5>Event @TempData["Deny"] Has Been Denied</h5>
+    </div>
+</div>
+}
+
+<div class="col-12 text-center">
+    @Html.PagedListPager(Model, page => Url.Action("PendingEvents",
+  new { page }))
+</div>
+
+@foreach (var evnt in Model)
+{
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="row no-gutters">
+                    <div class="col-sm-3 col-12">
+                        @if (evnt.Image != null)
+                        {
+                            <img src="data:image;base64,@System.Convert.ToBase64String(evnt.Image)" alt="@(evnt.Name) picture" class="w-100">
+                        }
+                        else
+                        {
+                            <img src="~/Images/@(evnt.CategoryName).jpg " alt="@(evnt.Name) picture" class="w-100">
+                        }
+                    </div>
+                    <div class="col-sm-6 col-12">
+                        <div class="px-2">
+                            <h4 class="card-title font-weight-bold">@evnt.Name</h4>
+                            <h5 class="card-text">Contact: @evnt.ContactName - @evnt.Contact</h5>
+                            <h5 class="card-text">@evnt.Description</h5>
+                        </div>
+                    </div>
+                    <div class="mt-auto col-sm-3 col-12">
+                        <div class="row no-gutters float-right">
+                            <a href="@Url.Action("Approve/" + evnt.EventId, "Events")" class="btn btn-success text-white m-1">Approve</a>
+                            <a href="@Url.Action("EditApprove/" + evnt.EventId , "Events")" class="btn btn-info text-white m-1">Edit</a>
+                            <a href="@Url.Action("Deny/" + evnt.EventId, "Events")" style="width: 86.1px" class="btn btn-danger text-white m-1">Deny</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+        </div>
+    </div>
+}
+
+
+<div class="col-12 text-center">
+    @Html.PagedListPager(Model, page => Url.Action("PendingEvents",
+  new { page }))
+</div>
+

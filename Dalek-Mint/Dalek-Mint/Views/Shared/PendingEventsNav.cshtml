@@ -1,0 +1,11 @@
+﻿<a class="link-no-ul" href="@Url.Action("PendingEvents", "Events")">
+    <div id="navEvents" class="px-2 pt-2">
+        <h5 class="px-2">
+            Pending Events
+            @if (ViewBag.PendingEventAmt != null)
+            {
+                <span class="badge midstate-red text-white">@ViewBag.PendingEventAmt</span>
+            }
+        </h5>
+    </div>
+</a>

@@ -1,0 +1,83 @@
+﻿
+
+<div class="row">
+    <h1 class="col-3">Help Guide</h1>
+</div>
+
+<div class="row">
+    <div class="col-3">
+
+    </div>
+    <div class="col-6">
+        @if (Session["Admin"] == null)
+        {
+            <h3>Submitting a Request</h3>
+            <div>
+                At any point when on the site there will be a button (button name) and when pressing this they will brought to a
+                page where they can pick what they would like to submit either a Event or a News Article. After clicking
+                the respective button, the user will be brought to a form where they will need to fill out all the information. 
+                Upon completing the form, they will click the submit button on the bottom of the page. At this point the Admin 
+                will have an opportunity to review this information and either deny, approve, or edit the request.
+            </div>
+        }
+        else
+        {
+            <h3>
+                Creating an item
+            </h3>
+            <div>
+                At any point when on the site there will be a button (button name) and when pressing this they will brought to a 
+                page where they can pick what they would like to submit either an Event, News Article, or Club. After clicking 
+                the respective button, the admin will be brought to a form where they will need to fill out all the information. 
+                Upon completing the form, they will click the create button on the bottom of the page.
+                The new item will show up in the respective list. Keep in mind the Events List will only show “upcoming” events, 
+                remember this when filling out the date portion of the form.
+
+            </div>
+            <br />
+            <h3>
+                Editing an item
+            </h3>
+            <div>
+                At any point on the site the admin can navigate to the item they wish to edit (Event/ News/ Club Card). 
+                The admin will see a “Edit” button above the picture. When the admin clicks on this they will be brought 
+                to a form where all the information currently being displayed. All the fields will be editable. Once the 
+                changes are made the admin can click the “Update” button on the page.
+            </div>
+            <br />
+
+            <h3>
+                Deleting an item
+            </h3>
+            <div>
+                At any point on the site the admin can navigate to the item they wish to delete (Event/ News/ Club Card). 
+                The admin will see a “Delete” button above the address information. When the admin clicks this, they will
+                be prompted with a message on screen asking, “Are you sure you want to delete this?”. If the admin clicks 
+                “Cancel” nothing happens. If the user clicks “Ok” the item will be archived. All records will be kept in the 
+                database but “deleted ones” will be “Archived”.
+            </div>
+            <br />
+
+            <h3>
+                Pending items
+            </h3>
+            <div>
+                At any point on the site the admin will see a “Pending (Event/News)” button in the navigation bar. 
+                When clicking on either of these the admin will see a list of pending items waiting for action. 
+                Three options will be displayed, one for “Edit”, “Approve”, and “Deny”. Approving the item will move the 
+                item right into the live list for all users. Denying the item will archive the item. Editing the item will 
+                take you to the same edit page except you can now see what the user has submitted for approval. As an admin 
+                you can alter this information and then either approve or deny on the bottom of the page.
+            </div>
+            <br />
+
+        }
+
+
+
+
+    </div>
+    <div class="col-3">
+
+    </div>
+</div>

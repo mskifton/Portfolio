@@ -1,0 +1,29 @@
+﻿@model Dalek_Mint.ViewModels.NewsViewModel
+
+
+<div class="col-sm-9 col-12">
+    @foreach (var news in Model.News)
+    {
+        <div class="row">
+            <div class="col-12">
+                <a href="@Url.Action("News/" + news.NewsId, "News")">
+                    <div class="card">
+                        <div class="row no-gutters">
+                            <div class="col-sm-3 col-12">
+                                <img src="~/images/img-placeholder.png" class="w-100" alt="News Picture">
+                            </div>
+                            <div class="col-sm-9 col-12">
+                                <div class="px-2">
+                                    <h4 class="card-title font-weight-bold">@news.Title</h4>
+                                    <h5 class="card-text">@news.PostedDate.ToString("dddd, MMMM dd, yyyy")</h5>
+                                    <h5 class="card-text">@news.Article</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <br />
+            </div>
+        </div>
+    }
+</div>

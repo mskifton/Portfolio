@@ -1,0 +1,90 @@
+﻿@using PagedList.Mvc;
+
+@{
+    ViewData["Title"] = "All News";
+
+
+    @model PagedList.IPagedList<Dalek_Mint.Models.News>
+
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+
+
+}
+
+<script>
+    function Search() {
+        window.location.href = window.location.pathname + "?search=" + document.getElementById("txSearch").value;
+    }
+
+    $(document).ready(function () {
+        $('#txSearch').keypress(function (e) {
+            if (e.keyCode == 13)
+                $('#btSearch').click();
+        });
+    });
+</script>
+
+<div class="row">
+    <h1 class="col-3">News</h1>
+
+    @if (Model.Count < 1)
+    {
+        <h1>There is nothing to show at this time</h1>
+        return;
+    }
+
+    <div class="col-9 float-right text-center">
+        @Html.Partial("_flashMessage", TempData["FlashMessage.Text"])
+    </div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-lg-3 col-12">
+        <div style="height: 82px;" class="d-none d-md-block"></div>
+        <div class="card mb-3">
+            <ul class="list-group list-group-flush">
+
+                @Html.Partial("_searchBar")
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-lg-9 col-12">
+        <div class="text-center">
+            @Html.PagedListPager(Model, page => Url.Action("AllNews",
+          new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        </div>
+        @foreach (var news in Model)
+        {
+            <div class="row">
+                <div class="col-12">
+                    <a href="@Url.Action("News/" + news.NewsId, "News")">
+                        <div class="card">
+                            <div class="row no-gutters">
+                                <div class="col-lg-3 col-12">
+                                    <img src="~/images/img-placeholder.png" class="w-100 rounded-circle" alt="News Picture">
+                                </div>
+                                <div class="col-lg-9 col-12">
+                                    <div class="px-2">
+                                        <h4 class="card-title font-weight-bold">@news.Title</h4>
+                                        <h5 class="card-text">@news.PostedDate.ToString("dddd, MMMM dd, yyyy")</h5>
+                                        <h5 class="card-text">@news.Article</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <br />
+                </div>
+            </div>
+        }
+        <div class="text-center">
+            @Html.PagedListPager(Model, page => Url.Action("AllNews",
+          new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        </div>
+    </div>
+</div>
